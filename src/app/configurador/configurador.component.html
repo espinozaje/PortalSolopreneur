@@ -116,27 +116,48 @@
                         <p class="text-slate-500">Revisa tu configuración antes de continuar.</p>
                     </div>
 
-                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-sm space-y-3 mb-6">
-                        <div class="flex justify-between">
-                            <span class="font-bold text-slate-700 text-base">Cliente:</span>
-                            <span class="font-medium text-slate-800">{{ client.name }} ({{ client.company }})</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-slate-500">Industria Base:</span>
-                            <span class="font-medium text-slate-800" id="summaryIndustry">{{ configService.industry() }}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-slate-500">Módulos Extra ({{ configService.selectedModules().length }}):</span>
-                            <div class="text-right font-medium text-slate-800" id="summaryModules">
-                                <span *ngIf="configService.selectedModules().length === 0">Ninguno</span>
-                                <div *ngFor="let mod of configService.selectedModules()">+ {{ mod.name }}</div>
-                            </div>
-                        </div>
-                        <div class="border-t pt-4 flex justify-between items-center">
-                            <span class="font-bold text-lg">Total Pago Único:</span>
-                            <span class="font-bold text-2xl text-blue-600" id="summaryTotal">${{ totalDisplay() | number: '1.0-0' }}</span>
-                        </div>
-                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 space-y-4 mb-6">
+    <div class="flex justify-between items-end border-b border-slate-200 pb-4">
+        <div>
+            <span class="font-bold text-slate-700 text-lg">Resumen de Inversión</span>
+            <p class="text-xs text-slate-500">Cliente: {{ client.name }}</p>
+        </div>
+    </div>
+
+    <div class="space-y-2">
+        <div class="flex justify-between text-sm">
+            <span class="text-slate-600">Industria Base ({{ configService.industry() }})</span>
+            <span class="font-medium text-slate-800">${{ configService.basePrice() | number }}</span>
+        </div>
+        <div class="flex justify-between text-sm" *ngFor="let mod of configService.selectedModules()">
+            <span class="text-slate-500">+ {{ mod.name }}</span>
+            <span class="font-medium text-slate-800">${{ mod.price | number }}</span>
+        </div>
+        
+        <div class="flex justify-between items-center pt-2 mt-2 border-t border-slate-200 border-dashed">
+            <div class="flex flex-col">
+                <span class="font-bold text-slate-800">Pago Único (Hoy)</span>
+                <span class="text-[10px] text-green-600 font-medium">Implementación e Infraestructura</span>
+            </div>
+            <span class="font-bold text-2xl text-slate-900">${{ totalDisplay() | number: '1.0-0' }}</span>
+        </div>
+    </div>
+
+    <div class="mt-4 pt-4 border-t-2 border-white bg-blue-50/50 -mx-6 px-6 pb-2">
+        <div class="flex justify-between items-center">
+            <div class="flex flex-col">
+                <span class="font-bold text-blue-800">Suscripción Mensual</span>
+                <span class="text-xs text-blue-600 flex items-center gap-1">
+                    <i class="fa-solid fa-gift"></i> ¡Primeros 30 días GRATIS!
+                </span>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-xl text-blue-700">${{ monthlyPrice | number }}<span class="text-sm font-normal">/mes</span></span>
+                <p class="text-[10px] text-blue-400">Inicia el {{ getNextMonthDate() | date:'dd/MM/yyyy' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
                     
                     <div id="highValueAlert" [class.hidden]="totalDisplay() <= 5000"
                         class="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4 text-amber-800 text-sm flex gap-3 items-start">

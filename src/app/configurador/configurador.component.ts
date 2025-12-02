@@ -17,7 +17,7 @@ export class ConfiguradorComponent implements OnInit{
   public currentStep = 1;
   public totalDisplay: any; // Total reactivo
   public isSubmitting = false;
-
+  public monthlyPrice = 99;
   // Datos del Step 3 (Bindings del formulario)
   public client = {
     name: '',
@@ -60,6 +60,13 @@ export class ConfiguradorComponent implements OnInit{
 
   showStep(step: number): void {
     this.currentStep = step;
+  }
+
+  // Retorna la fecha de hoy + 30 días
+  getNextMonthDate(): Date {
+    const date = new Date();
+    date.setDate(date.getDate() + 30);
+    return date;
   }
 
   nextStep(): void {

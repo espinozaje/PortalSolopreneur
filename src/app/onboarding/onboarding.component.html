@@ -107,12 +107,24 @@
                         </div>
                     </div>
 
-                    <button (click)="deploySystem()" [disabled]="progress < 100" 
+                    <button *ngIf="deploymentStatus === 'pending'" (click)="deploySystem()" [disabled]="progress < 100" 
                         class="w-full mt-4 py-3 rounded-xl font-bold text-white transition-all flex justify-center items-center gap-2"
                         [ngClass]="progress === 100 ? 'bg-green-600 hover:bg-green-700 shadow-lg cursor-pointer' : 'bg-slate-300 cursor-not-allowed'">
                         <i *ngIf="progress === 100" class="fa-solid fa-rocket"></i>
                         {{ progress === 100 ? 'Lanzar mi Sistema' : 'Completa las tareas' }}
                     </button>
+
+                    <div *ngIf="deploymentStatus === 'building'" class="w-full mt-4 py-4 bg-blue-50 text-blue-700 rounded-xl border border-blue-200 flex flex-col items-center justify-center animate-pulse">
+                        <i class="fa-solid fa-gear fa-spin text-2xl mb-2"></i>
+                        <span class="font-bold">Construyendo Infraestructura...</span>
+                        <span class="text-xs">Esto tomará unos 3 minutos. No cierres esta pestaña.</span>
+                    </div>
+
+                    <div *ngIf="deploymentStatus === 'active'" class="w-full mt-4">
+                        <a [href]="finalUrl" target="_blank" class="block w-full py-3 bg-green-600 hover:bg-green-700 text-white text-center rounded-xl font-bold shadow-lg transition-transform hover:scale-105 cursor-pointer">
+                            ¡Tu Sistema está Online! 🚀
+                        </a>
+                    </div>
 
                     <div class="mt-6 pt-6 border-t border-slate-100 text-center">
                         <p class="text-xs text-slate-400 mb-2">¿Necesitas ayuda?</p>
@@ -122,5 +134,123 @@
             </div>
 
         </div>
+    </div>
+</div>
+
+
+<div *ngIf="deploymentStatus === 'active'" class="fixed inset-0 bg-slate-50 z-50 overflow-auto">
+    
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">
+                    {{ clientName.charAt(0) }}
+                </div>
+                <h1 class="font-bold text-slate-800">{{ clientName }} Panel</h1>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full border border-green-200 text-sm font-medium">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    Sistema Operativo
+                </div>
+                <button class="text-sm text-slate-500 hover:text-blue-600">Salir</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-xl mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+                <h2 class="text-2xl font-bold mb-2">¡Tu Infraestructura está lista! 🚀</h2>
+                <p class="text-blue-100 max-w-xl">
+                    Tu sistema personalizado para {{ purchasedModules.join(', ') }} está corriendo en la nube.
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-credit-card"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-lg">Suscripción</h3>
+                <p class="text-sm text-slate-500 mt-2 mb-4">Gestiona tu método de pago, descarga facturas o cambia tu plan.</p>
+                <button (click)="openBillingPortal()" class="w-full py-2 border border-slate-300 text-slate-700 font-medium rounded-lg hover:bg-slate-50 transition">
+                    Gestionar Pagos
+                </button>
+            </div>
+
+
+            
+        </div>
+    </div>
+</div>
+
+
+<button (click)="toggleChat()" 
+    class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-110 z-50">
+    <i class="fa-solid" [ngClass]="isChatOpen ? 'fa-xmark' : 'fa-message'"></i>
+</button>
+
+<div *ngIf="isChatOpen" 
+     class="fixed bottom-24 right-6 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 flex flex-col overflow-hidden animate-fade-in-up"
+     style="height: 500px; max-height: 80vh;">
+    
+    <div class="bg-blue-600 p-4 text-white flex items-center gap-3">
+        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+            <i class="fa-solid fa-robot"></i>
+        </div>
+        <div>
+            <h3 class="font-bold text-sm">Asistente IA</h3>
+            <p class="text-xs text-blue-100">Soporte Nivel 1</p>
+        </div>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50" #scrollContainer>
+        
+        <div class="flex justify-start">
+            <div class="bg-white border border-slate-200 text-slate-600 rounded-2xl rounded-tl-none py-2 px-4 text-sm shadow-sm max-w-[85%]">
+                Hola {{ clientName }}, soy tu asistente virtual. ¿En qué puedo ayudarte hoy?
+            </div>
+        </div>
+
+        <div *ngFor="let msg of chatMessages" class="flex" [ngClass]="msg.sender === 'user' ? 'justify-end' : 'justify-start'">
+            <div [ngClass]="msg.sender === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white border border-slate-200 text-slate-700 rounded-tl-none'"
+                 class="rounded-2xl py-2 px-4 text-sm shadow-sm max-w-[85%]">
+                
+                <span *ngIf="msg.text !== 'ESCALAR_A_HUMANO'">{{ msg.text }}</span>
+
+                <div *ngIf="msg.text === 'ESCALAR_A_HUMANO'" class="flex flex-col gap-2">
+                    <p class="text-red-500 font-bold mb-1">🤔 No estoy seguro de cómo resolver eso.</p>
+                    <p>Parece un problema complejo. ¿Quieres abrir un ticket para un ingeniero humano?</p>
+                    <button (click)="escalateToTicket()" class="mt-2 bg-blue-600 text-white py-2 px-3 rounded-lg text-xs font-bold hover:bg-blue-700 transition">
+                        🎫 Crear Ticket de Soporte
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <div *ngIf="isChatLoading" class="flex justify-start">
+            <div class="bg-slate-200 text-slate-500 rounded-2xl rounded-tl-none py-2 px-4 text-xs animate-pulse">
+                Escribiendo...
+            </div>
+        </div>
+    </div>
+
+    <div class="p-3 bg-white border-t border-slate-100 flex gap-2">
+        <input [(ngModel)]="currentChatMessage" (keyup.enter)="sendMessage()" 
+               type="text" placeholder="Escribe tu duda..." 
+               class="flex-1 bg-slate-100 border-none rounded-full px-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+        <button (click)="sendMessage()" [disabled]="!currentChatMessage.trim() || isChatLoading"
+                class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="fa-solid fa-paper-plane text-xs"></i>
+        </button>
     </div>
 </div>
