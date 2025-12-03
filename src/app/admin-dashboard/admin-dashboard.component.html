@@ -54,6 +54,21 @@
       <div class="text-4xl font-bold">{{ data.exceptionQueue.length }}</div>
       <div class="text-xs text-purple-200 mt-1">Requieren tu atención humana</div>
     </div>
+
+    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition relative overflow-hidden group">
+    <div class="absolute top-0 right-0 bg-pink-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">IA</div>
+    
+    <div class="w-12 h-12 bg-pink-100 text-pink-600 rounded-lg flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+        <i class="fa-brands fa-youtube"></i>
+    </div>
+    
+    <h3 class="font-bold text-slate-800 text-lg">Marketing Automático</h3>
+    <p class="text-sm text-slate-500 mt-2 mb-4">Genera videos y posts virales sobre tu negocio con un solo clic.</p>
+    
+    <button (click)="openMarketingModal()" class="w-full py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-lg hover:shadow-lg hover:opacity-90 transition">
+        ✨ Crear Campaña
+    </button>
+</div>
   </div>
 
   <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">

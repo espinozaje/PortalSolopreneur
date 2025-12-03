@@ -30,6 +30,7 @@ export class ConfigService {
   private opsUrl = `${environment.apiUrl}/webhook/dashboard-actions`;
   private readonly CHAT_URL = `${environment.apiUrl}/webhook/chat-support`;
   private readonly ADMIN_DASHBOARD_URL = `${environment.apiUrl}/webhook/admin-dashboard`;
+  private readonly MARKETING_URL = `${environment.apiUrl}/webhook/agente-youtube`;
   private readonly basePrices: { [key: string]: number } = {
     'Clinica Dental': 1000,
     'E-commerce': 1200,
@@ -49,7 +50,10 @@ export class ConfigService {
   });
 
   constructor(private http: HttpClient) { }
-
+  launchMarketingCampaign(tema: string): Observable<any> {
+    // Enviamos el tema en el cuerpo del mensaje
+    return this.http.post(this.MARKETING_URL, { tema: tema });
+  }
 
   validateWithN8n(type: string, content: File | string, clientId?: string): Observable<any> {
     const formData = new FormData();
